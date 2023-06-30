@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<script>
+    $(document).ready(function(){
+        $("#inlineFormCustomSelect").change(function(){
+            if($(this).val() == "Clothing"){
+                $("#size").show();
+                $("#colour").show();
+                $("#spec").hide();
+            }
+            else if($(this).val() == "Computer Components" || $(this).val() == "Monitors"){
+                $("#size").hide();
+                $("#colour").hide();
+                $("#spec").show();
+            }
+            else if ($(this).val() == "Snacks"){
+                $("#size").hide();
+                $("#colour").hide();
+                $("#spec").hide();
+            }
+            else {
+                $("#size").show();
+                $("#colour").show();
+                $("#spec").show();  
+            }
+        });
+    }).trigger("change");
+</script>
+
+<style>
+    .form-floating {
+        margin: 10px;
+    }
+</style>
+
+
+<div class="col-lg-4 col-md-6 col-sm-12 col-xs-12" style="text-align: center; margin: 100px auto;">
+    <!-- Add Product -->
+    <div class="card text-white bg-dark" style="padding: 30px">
+      <form action="/add-item" method="POST" name="addProduct">
+        <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Filter</label>
+        
+        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="category">
+          <option value="">Select Category</option>
+          <option >Clothing</option>
+          <option >Computer Components</option>
+          <option >Snacks</option>
+          <option >Monitors</option>
+        </select>
+  
+        <div class="form-floating">
+          <input type="text" name="name" class="form-control" id="name" placeholder="Enter a name for the product...">
+        </div>
+        <div class="form-floating">
+            <input type="text" name="description" class="form-control" id="description" placeholder="Description...">
+        </div>
+        <div class="form-floating">
+            <input type="number" name="price" class="form-control" id="price" placeholder="Price...">
+        </div>
+        <div class="form-floating">
+            <input type="text" name="seller" class="form-control" id="seller" placeholder="Enter a seller for the product...">
+        </div>
+        <div class="form-floating">
+            <input type="text" name="imageurl" class="form-control" id="imageurl" placeholder="Enter a image url for the product...">
+        </div>
+        <div class="form-floating">
+            <input type="text" name="size" class="form-control" id="size" placeholder="Enter a size for the cloth...">
+        </div>
+        <div class="form-floating">
+            <input type="text" name="colour" class="form-control" id="colour" placeholder="Enter a colour for the cloth...">
+        </div>
+        <div class="form-floating">
+            <input type="text" name="spec" class="form-control" id="spec" placeholder="Enter a spec for the computer component or monitor...">
+        </div>
+        <div style="margin : 15px 15px">
+            <button class="btn btn-md btn-primary" name="additem" type="submit">Add Item</button>
+        </div>
+      </form>
+      
+      </div>
+      
+    </div>
+
+    
+  
+
+
+
+
+
+
+{% endblock %}

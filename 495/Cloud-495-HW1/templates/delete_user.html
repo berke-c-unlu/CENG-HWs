@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- List users and add delete button for every of them.-->
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" style="text-align: center; margin: 100px auto;">
+    <div class="card text-white bg-dark col-auto">
+      <h3> USERS </h3>
+      {% for user in users %}
+      <div class="card text-white bg-secondary col-auto" style="margin: 10px 20px; width: auto; height:auto;">
+            <p class="card-text"> 
+              <strong class="text-warning">
+                {{ user.username }}
+              </strong>
+            </p>
+            <form action="/delete-user" method="post">
+                <input type="hidden" name="username" value="{{user.username}}">
+                <button class="btn btn-danger" type="submit">Delete User</button>
+            </form>
+      </div>
+      {% endfor %}
+    </div>
+</div>
+
+  {% endblock %}

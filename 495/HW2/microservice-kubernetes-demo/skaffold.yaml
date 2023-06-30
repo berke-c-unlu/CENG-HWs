@@ -1,0 +1,25 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: microservice-kubernetes-demo
+build:
+  artifacts:
+    - image: docker.io/ewolff/microservice-kubernetes-demo-apache
+      context: apache
+      docker:
+        dockerfile: Dockerfile
+    - image: docker.io/ewolff/microservice-kubernetes-demo-catalog
+      context: microservice-kubernetes-demo-catalog
+      docker:
+        dockerfile: Dockerfile
+    - image: docker.io/ewolff/microservice-kubernetes-demo-customer
+      context: microservice-kubernetes-demo-customer
+      docker:
+        dockerfile: Dockerfile
+    - image: docker.io/ewolff/microservice-kubernetes-demo-order
+      context: microservice-kubernetes-demo-order
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - microservices.yaml

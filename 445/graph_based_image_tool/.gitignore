@@ -1,0 +1,15 @@
+
+test_images
+
+components/__pycache__
+components/__pycache__/
+
+__pycache__
+outputs
+*.txt
+
+outputs
+
+.DS_Store
+
+__pycache__

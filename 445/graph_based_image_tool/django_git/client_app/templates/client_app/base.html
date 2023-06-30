@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Based Image Tool</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/8f27ddf9ab.js" crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    {% load static %}
+    <script src="{% static 'scripts.js' %}"></script>
+    
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- Nav Bar -->
+        <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-primary">
+          <a class="navbar-brand" href="/">Graph-Based-Image-Tool</a>
+    
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+    
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <ul class="nav navbar-nav">
+            {% if logged_in == True %}
+              <!-- <li class="nav-item">
+                <h5 style="padding-top: 5px;">Logged in as {{ username }}</h5>
+              </li>
+              <li>
+                <h5 style="padding-top: 5px;">Selected graph is {{graph.name}}</h5>
+              </li> -->
+              <li class="nav-item" style="padding-left: 10px;">
+                <form action="{% url 'index' %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-md btn-dark" type="submit" name="logout_button" value="Logout">Logout</button>
+                  </form>              
+                </li>
+            {% endif %}
+            </ul>
+          </div>
+        </nav>
+    </div>
+    {% block content %} {% endblock %}
+</body>
+
+</html>

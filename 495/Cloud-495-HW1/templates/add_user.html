@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .form-floating {
+        margin: 10px;
+    }
+</style>
+
+<!-- Add User -->
+<div class="col-lg-4 col-md-6 col-sm-12 col-xs-12" style="text-align: center; margin: 100px auto;">
+    <div class="card text-white bg-dark">
+      <form action="/add-user" method="post">
+        <div class="form-floating">
+          <input type="text" name="username" class="form-control" id="username" placeholder="Enter a username...">
+        </div>
+
+        <div class="form-floating">
+          <input type="password" name="password" class="form-control" id="password" placeholder="Enter a password...">
+        </div>
+
+        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="is_admin">
+            <option value="">Select Admin Option</option>
+            <option value="True">True</option>
+            <option value="False">False</option>
+          </select>
+
+        <div style="margin : 15px 15px">
+          <button class="btn btn-md btn-primary" name="adduser" type="submit">Add User</button>
+        </div>      
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}

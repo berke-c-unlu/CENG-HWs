@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" style="text-align: center; margin: 100px auto;">
+
+  <div class="card text-white bg-dark">
+
+    <img class="img-responsive" src="{{current[0]['image']}}" alt="{{current[0]['description']}}">
+
+    <div class="card-body">
+
+      <h5 class="card-title">{{current[0]['name']}}</h5>
+
+      <p class="card-text">{{current[0]['description']}}</p>
+
+      <p class="card-text">
+        Seller : 
+        {{current[0]['seller']}}
+      </p>
+
+      <p class="card-text">
+        Type :
+        {{current[0]['type']}}
+      </p>
+
+      {% if current[0]['type'] == 'Clothing' %}
+      <p class="card-text">
+        Size :
+        {{current[0]['size']}}
+      </p>
+      <p class="card-text">
+        Colour :
+        {{current[0]['colour']}}
+      </p>
+
+      {% endif %}
+
+      {% if current[0]['type'] == 'Monitors' %}
+      <p class="card-text">
+        Spec :
+        {{current[0]['spec']}}
+      </p>
+      {% endif %}
+
+      {% if current[0]['type'] == 'Computer Components' %}
+      <p class="card-text">
+        Spec :
+        {{current[0]['spec']}}
+      </p>
+      {% endif %}
+
+      <h5 class="card-text"> 
+        <strong class="text-primary">{{current[0]['price']}}$ </strong>
+      </h5>
+
+      <p class="card-text"> 
+        <strong class="text-warning">
+                {{ '%0.2f' | format(current[0]['rating']|float())}} / 5
+        </strong>
+        <i class="fa-solid fa-star" style="color: #ffbb00;"></i>
+      </p>
+
+
+      <form action="/product/{{current[0]['_id']}}" method="POST">
+        <div class="col-auto">
+            <input type="text" name="review" class="form-control" id="floatingInput" placeholder="Write your review...">
+        </div>
+
+        <div class="col-auto">
+            <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Rate</label>
+            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="rating">
+              <option >1</option>
+              <option >2</option>
+              <option >3</option>
+              <option >4</option>
+              <option >5</option>
+            </select>
+          </div>
+
+        <button type="submit" class="btn btn-md btn-primary">Enter Review</button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" style="text-align: center; margin: 100px auto;">
+    <div class="card text-white bg-dark col-auto">
+      <h3> Reviews </h3>
+      {% for review in current[0]['reviews'] %}
+      <div class="card text-white bg-info col-auto" style="margin: 10px 20px; width: auto; height:auto;">
+        <p class="card-text">User: {{review['u_name']}}</p>
+        <p class="card-text">Rating: {{review['rating']}} <i class="fa-solid fa-star" style="color: #ffffff;"></i></p>
+        <p class="card-text">Review: {{review['review']}}</p>
+      </div>
+      {% endfor %}
+    </div>
+    
+    
+  </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,342 @@
+{% extends "client_app/base.html" %} {% block content %}
+
+
+{% if error  %}
+    <div class="alert alert-danger" role="alert" style="margin-top: 60px;">
+        {{ error }}
+    </div>
+{% endif %}
+{% if success %}
+    <div class="alert alert-success" role="alert" style="margin-top: 60px;">
+        {{ success }}
+    </div>
+{% endif %}
+    
+{% if logged_in == False %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card text-center mx-auto" style="padding-top: 50px; float: none; padding-bottom: 10px;">
+            <div class="card-header">
+            Register
+            </div>
+            <div class="card-body">
+                <form action="{% url 'index' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-floating">
+                    <input type="text" name="username" class="form-control" placeholder="username" style="width: 50%; margin: 10px auto;">
+                    <input type="password" name="passwd" class="form-control" placeholder="password" style="width: 50%; margin: 10px auto;">
+                    <input type="email" name="email" class="form-control" placeholder="email" style="width: 50%; margin: 10px auto;">
+                    <input type="text" name="fullname" class="form-control" placeholder="fullname" style="width: 50%; margin: 10px auto;">
+                
+                </div>
+                
+                    <div style="padding: 25px;">
+                        <button class="btn btn-md btn-secondary" name="register_button" type="submit" value="Register">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card text-center mx-auto" style="padding-top: 50px; float: none; padding-bottom: 10px;">
+            <div class="card-header">
+            Login
+            </div>
+            <div class="card-body">
+                <form action="{% url 'index' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-floating">
+                    <input type="text" name="username" class="form-control" placeholder="username" style="width: 50%; margin: 10px auto;">
+                    <input type="password" name="passwd" class="form-control" placeholder="password" style="width: 50%; margin: 10px auto;">
+                    </div>
+                
+                    <div style="padding: 25px;">
+                        <button class="btn btn-md btn-primary" name="login_button" type="submit" value="Login">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% else %}
+    <div class="card text-center mx-auto" style="padding-top: 50px; float: none; padding-bottom: 5px;">
+    <div class="card-header">
+      Add Graph
+    </div>
+    <div class="card-body">
+        <form action="{% url 'index' %}" method="post" style="padding-top: 5px; float: none; padding-bottom: 5px;">
+            {% csrf_token %}
+            <input type="text" name="graph_name" class="form-control" id="graph_name" placeholder="Enter graph name" style="width: 50%; margin: 10px auto;">
+            <div style="padding: 5px;">
+                <button class="btn btn-md btn-dark" name="add_graph_button" value="Add Graph" type="submit" >Add Graph</button>
+            </div>
+        </form>
+    </div>
+    </div>
+
+{% endif %}
+
+
+  <div class="row">
+    <!-- Available Components -->
+    <div class="col-lg-6">
+       <div class="affix">
+            <div class="card mt-1">
+                <div class="card-header">
+                  Available Components
+                </div>
+                <div class="card-body">
+                {% for graph in graphs %}
+                <ul>
+                    {% if graph.name == opened_graph %}
+                    {% for node in graph.nodes %}
+                    <li>
+                        <h5>{{ node.component }}</h5>
+                        <h6> Node ID: [{{node.id}}]</h6>
+                        <div class="row">
+                            <div class="col">
+                            {% if node.inports != None %}
+                            <h6>Inports</h6>
+                            <ul>
+                                {% for key,value in node.inports.items %}
+                                <li>
+                                    <p>{{key}}:
+                                        {% if value == None %}
+                                        Empty
+                                        {% else %}
+                                        Node {{ value.0 }}'s <b>{{ value.1 }}</b> port
+                                        {% endif %}
+                                    </p>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>No inports</p>
+                            {% endif %}
+                            </div>
+                            <div class="col">
+                            {% if node.outports != None %}
+                            <h6>Outports</h6>
+                            <ul>
+                                {% for key,value in node.outports.items %}
+                                <li>
+                                    <p>{{key}}:
+                                        {% if value == None %}
+                                        Empty
+                                        {% else %}
+                                        Node {{ value.0 }}'s <b>{{ value.1 }}</b> port
+                                        {% endif %}
+                                    </p>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>No outports</p>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    <hr>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="card mt-1 mb-1">
+            <div class="card-header">
+                Graphs
+            </div>
+            <div class="card-body">
+                {% for graph in graphs %}
+                <h5 class="card-title">Graph Name: {{ graph.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Owner: {{ graph.owner }}</h6>
+                <form action="{% url 'index' %}" method="post">
+                    {% csrf_token %} {% if graph.name != opened_graph %} {% if logged_in == True %}
+                    <button class="btn btn-success" type="submit" name="open_graph_button" value="{{ graph.name }}">Open</button> 
+                    {% endif %} 
+                    {% else %}
+                    <button class="btn btn-danger" type="submit" name="close_graph_button" value="{{ graph.name }}">Close</button>
+                    <div class="card mb-1 mt-1">
+                        <div class="card-header">
+                            Add Components
+                        </div>
+                        <div class="card-body">
+                            {% for graph in graphs %}
+                            {% if graph.name == opened_graph %}
+                            <form action="{% url 'index' %}" method="post">
+                                {% csrf_token %}
+                                <select class="form-select" name="component_type" id="component_type">
+                                    <option value="load_image">Load Image</option>
+                                    <option value="save_image">Save Image</option>
+                                    <option value="crop">Crop</option>
+                                    <option value="dup_image">Duplicate Image</option>
+                                    <option value="fit">Fit</option>
+                                    <option value="get_dimensions">Get Dimensions</option>
+                                    <option value="get_float">Get Float</option>
+                                    <option value="get_integer">Get Integer</option>
+                                    <option value="h_stack">Horizontal Stack</option>
+                                    <option value="rotate">Rotate</option>
+                                    <option value="scale">Scale</option>
+                                    <option value="stack">Stack</option>
+                                    <option value="stretch">Stretch</option>
+                                    <option value="view_image">View Image</option>
+                            
+                                </select>
+                                <button class="btn btn-primary" type="submit" name="add_component_button" value="Add Component"> Add Component </button>
+                            </form>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="card mb-1">
+                        <div class="card-header">
+                            Connect Components
+                            </div>
+                        <div class="card-body">
+                            {% for graph in graphs %}
+                            {% if graph.name == opened_graph %}
+                            <form action="{% url 'index' %}" method="post">
+                                {% csrf_token %}
+                                <div>
+                                    <div>
+                                        <label for="node1">Node 1</label>
+                                        <select class="form-select" name="node1" id="node1" onchange="handleNodeSelection(this.selectedIndex,1,'connect')">
+                                            {% for node in graph.nodes %}
+                                            <option value="{{ node.id }}">{{ node.id }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label for="outports_connect">Outport: </label>
+                                        <select class="form-select" name="outports_connect" id="outports_connect">
+                                            <option value="None">None</option>
+                                        </select>
+                                    </div>
+                            
+                                    <div>
+                                        <label for="node2">Node 2</label>
+                                        <select class="form-select" name="node2" id="node2"  onchange="handleNodeSelection(this.selectedIndex,2,'connect')">
+                                            {% for node in graph.nodes %}
+                                            <option value="{{ node.id }}">{{ node.id }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label for="inports_connect">Inport: </label>
+                                        <select class="form-select" name="inports_connect" id="inports_connect">
+                                            <option value="None">None</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-success" type="submit" name="connect_nodes_button" value="">Connect</button>
+                            
+                                </div>
+                            </form>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="card mb-1">
+                        <div class="card-header">
+                            Disconnect Components
+                            </div>
+                        <div class="card-body">
+                            {% for graph in graphs %}
+                            {% if graph.name == opened_graph %}
+                            <form action="{% url 'index' %}" method="post">
+                                {% csrf_token %}
+                                <div>
+                                    <div>
+                                        <label for="node1">Node 1</label>
+                                        <select class="form-select" name="node1" id="node1" onchange="handleNodeSelection(this.selectedIndex,1,'disconnect')">
+                                            {% for node in graph.nodes %}
+                                            <option value="{{ node.id }}">{{ node.id }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label for="outports_disconnect">Outport: </label>
+                                        <select class="form-select" name="outports_disconnect" id="outports_disconnect">
+                                            <option value="None">None</option>
+                                        </select>
+                                    </div>
+                            
+                                    <div>
+                                        <label for="node2">Node 2</label>
+                                        <select class="form-select" name="node2" id="node2"  onchange="handleNodeSelection(this.selectedIndex,2,'disconnect')">
+                                            {% for node in graph.nodes %}
+                                            <option value="{{ node.id }}">{{ node.id }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label for="inports_disconnect">Inport: </label>
+                                        <select class="form-select" name="inports_disconnect" id="inports_disconnect">
+                                            <option value="None">None</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-danger" type="submit" name="disconnect_nodes_button" value="">Disconnect</button>
+                            
+                                </div>
+                            </form>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="card mb-1">
+                        <div class="card-header">
+                            Parameters
+                        </div>
+                        <div class="card-body">
+                            {% for graph in graphs %}
+                            {% if graph.name == opened_graph %}
+                            <form action="/" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div>
+                                    <ul>
+                                        {% for node in graph.nodes %} 
+                                            
+                                                {% if node.component == 'LoadImage component' %}
+                                                <li>
+                                                    <label for="load_image_{{node.id}}">Choose an image for LoadImage-{{node.id}} </label>
+                                                    <input type="file" name="load_image_{{node.id}}" accept="image/*">
+                                                </li>
+                                                {% elif node.component == "SaveImage component" %}
+                                                <li>
+                                                <label for="save_image_{{node.id}}">Enter a path for SaveImage-{{node.id}} </label>
+                                                <input type="text" name="save_image_{{node.id}}" value="">
+                                                </li>
+                                                {% elif node.component == "GetFloat component" %}
+                                                <li>
+                                                <label for="get_float_{{node.id}}">Enter a float for GetFloat-{{node.id}} </label>
+                                                <input type="text" name="get_float_{{node.id}}" value="">
+                                                </li>
+                                                {% elif node.component == "GetInteger component" %}
+                                                <li>
+                                                <label for="get_integer_{{node.id}}">Enter an integer for GetInteger-{{node.id}} </label>
+                                                <input type="text" name="get_integer_{{node.id}}" value="">
+                                                </li>                                
+                                            <hr>
+                                            {% endif %} 
+                                        {% endfor %}
+                                    </ul>
+                                    <button class="btn btn-primary" type="submit" name="execute_graph_button" value="{{ graph.name }}">Execute</button>
+                                </div>
+                            </form>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </form>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+        {% if opened_graph != 'None' %}
+
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

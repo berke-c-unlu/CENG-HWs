@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  #card-img {
+    width: 100%;
+    height: 40vh;
+    object-fit: cover;
+}
+</style>
+
+<form action="/" method="POST">
+
+  <div class="form-row align-items-center" style ="margin:100px;">
+
+    <div class="col-auto">
+
+      <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Filter</label>
+      
+      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="filter">
+        <option >All</option>
+        <option >Clothing</option>
+        <option >Computer Components</option>
+        <option >Snacks</option>
+        <option >Monitors</option>
+      </select>
+
+    </div>
+
+    <div class="col-auto">
+      <button type="submit" class="btn btn-md btn-dark">Filter</button>
+    </div>
+
+  </div>
+
+</form>
+
+
+
+
+<div class="card-deck" style="text-align: center; margin: 100px auto;">
+
+  {% for product in products %}
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="margin-bottom: 100px;">
+      
+      <div class="card text-white bg-dark" id="product-card">
+
+        <img class="img-responsive" src="{{product['image']}}" alt="{{product['description']}}" id="card-img">
+        
+        <div class="card-body">
+
+          <h5 class="card-title">{{product['name']}}</h5>
+          <p class="card-text">{{product['description']}}</p>
+          <h5 class="card-text"> 
+            <strong class="text-primary">
+              {{product['price']}}$ 
+            </strong>
+          </h5>
+          <p class="card-text"> 
+            <strong class="text-warning">
+                {{'%0.2f' | format(product['rating']|float())}} / 5
+            </strong>
+            <i class="fa-solid fa-star" style="color: #ffbb00;"></i>
+          </p>
+
+          <form action="/product/{{product['_id']}}" method="GET">
+            <button type="submit" class="btn btn-md btn-primary">View</button>
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    {% endfor %}
+
+  </div>
+
+
+{% endblock %}

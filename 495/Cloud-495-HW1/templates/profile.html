@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" style="margin: 100px auto;">
+
+    <div class="card text-white bg-dark">  
+  
+        <h5 class="card-title" style="text-align:center;">PROFILE</h5>
+        <p class="card-text">Username : {{user['username']}}</p>
+        <p class="card-text">Average Rating : {{ '%0.2f' | format(user['average_rating']|float())}} 
+          <i class="fa-solid fa-star" style="color: #ffffff;"></i>
+        </p>
+    </div>
+</div>
+
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" style="text-align: center; margin: 100px auto;">
+  <div class="card text-white bg-dark col-auto">
+    <h3> Reviews </h3>
+    {% for review in user['reviews'] %}
+    <div class="card text-white bg-info col-auto" style="margin: 10px 20px; width: auto; height:auto;">
+      <p class="card-text">Product: {{review['p_name']}}</p>
+          <p class="card-text">Rating: {{review['rating']}}</p>
+          <p class="card-text">Review: {{review['review']}}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+
+
+{% endblock %}

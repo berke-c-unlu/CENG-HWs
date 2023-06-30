@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+    
+    <div class="card text-center mx-auto" style="padding-top: 100px; float: none; padding-bottom: 10px;">
+    
+        <form action="/login" method="POST">
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <div class="form-floating">
+              <input type="text" name="username" class="form-control" id="floatingInput" placeholder="username" style="width: 50%; margin: 10px auto;">
+              <input type="password" name="password" class="form-control" id="floatingInput" placeholder="password" style="width: 50%; margin: 10px auto;">
+            </div>
+        
+            <div style="padding: 25px;">
+                <button class="btn btn-md btn-dark" name="signin" type="submit">Sign in</button>
+            </div>
+            
+
+          </form>
+    </div>
+
+{% endblock %}
